@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router'; 
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -16,14 +17,29 @@ export class LoginPage implements OnInit {
   email: string = '';
   password: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   login() {
-    if (this.email === 'test@example.com' && this.password === 'password') {
-      this.router.navigate(['/home']);
-    } else {
-      alert('Invalid credentials');
-    }
+    this.authService.signIn(this.email, this.password)
+      .then(res => {
+        console.log('✅ Logged in as:', res.user?.email);
+        // You could also route to the home page or show a toast
+      })
+      .catch(err => {
+        console.error('❌ Login error:', err.message);
+      });
+  }
+
+  continueAsGuest() {
+    this.authService.signInAsGuest()
+      .then(res => {
+        console.log('✅ Signed in as guest');
+        this.router.navigate(['/home']);
+      })
+      .catch(err => console.error('❌ Guest login failed:', err));
   }
 
   goToSignup() {
@@ -32,7 +48,6 @@ export class LoginPage implements OnInit {
 
   ngOnInit() {
   }
-
 }
 
 export class LoginPageModule {}
