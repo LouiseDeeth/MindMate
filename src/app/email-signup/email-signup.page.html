@@ -1,0 +1,50 @@
+<ion-header [translucent]="true" class="signup-header">
+  <ion-toolbar>
+
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="gray-background" fullscreen>
+  
+  <div class="page-top-container">
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/home"></ion-back-button>
+    </ion-buttons>
+  </div>
+
+  <div class="app-branding">
+    <img src="assets/images/Logo.png" alt="MindMate Logo" class="app-logo" />
+    <h2 class="app-title">MindMate</h2>
+  </div>
+  
+  <div class="auth-container">
+    <ion-item class="auth-input" lines="none">
+      <ion-input placeholder="Enter name" [(ngModel)]="name"></ion-input>
+    </ion-item>
+
+    <ion-item class="auth-input" lines="none">
+      <ion-input placeholder="Enter email" [(ngModel)]="email"></ion-input>
+    </ion-item>
+
+    <ion-item class="auth-input" lines="none">
+      <ion-input type="password" placeholder="Enter password" [(ngModel)]="password"></ion-input>
+    </ion-item>
+
+    <ion-item class="auth-input" lines="none">
+      <ion-input type="password" placeholder="Enter password again" [(ngModel)]="confirmPassword"></ion-input>
+    </ion-item>
+
+    <ion-item class="auth-input" lines="none">
+      <ion-input placeholder="Enter phone number" [(ngModel)]="phone"></ion-input>
+    </ion-item>
+
+    <ion-item class="auth-input" lines="none">
+      <ion-input placeholder="Add Photo (optional)" [(ngModel)]="photoUrl"></ion-input>
+    </ion-item>
+
+    <div class="button-center">
+      <ion-button class="save-btn" (click)="register()">Save</ion-button>
+    </div>
+  </div>
+  
+</ion-content>

@@ -1,0 +1,38 @@
+.save-btn {
+    --background: #1B4965 !important;
+    color: white !important;
+    font-weight: 500;
+    border-radius: 10px;
+    text-transform: none;
+    --padding: 12px;
+    width: 50%;
+  }
+  .button-center {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .login-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .auth-container {
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .auth-input {
+    --background: #EDEDE9;
+    color: #828282;
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-style: italic;
+  }

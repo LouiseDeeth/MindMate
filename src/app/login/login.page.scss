@@ -1,0 +1,85 @@
+// Login Button
+.login-btn {
+    --background: #1B4965 !important;
+    color: white !important;
+    font-weight: 500;
+    border-radius: 10px;
+    text-transform: none;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+  }
+
+  // This is the background colour for the login page
+.login-background {
+  --background: #84A98C;
+  background-color: #84A98C;
+}
+//Login page styling
+.auth-container {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  gap: 15px;
+  margin-top: 60px;
+}
+
+.auth-title {
+  margin-top: 40px;
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+  text-align: center;
+}
+
+.auth-input {
+  border-radius: 10px;
+  overflow: hidden;
+  color: #828282;
+  --background: #EDEDE9 !important;
+  font-style: italic;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #1B4965;
+  font-weight: 500;
+  font-size: 14px;
+  margin: 10px 0;
+  font-style: italic;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #1B4965 !important;
+  margin: 0 10px;
+}
+
+.sign-up-title {
+  font-size: 20px;
+  font-weight: 500;
+  color: black;
+  text-align: center;
+}
+
+// Alt Buttons
+.auth-alt-btn {
+  --border-radius: 10px;
+  --color: black;
+  --background: #EDEDE9 !important;
+  text-transform: none;
+  font-weight: 400;
+  --padding-top: 14px;
+  --padding-bottom: 14px;
+  border-color: #EDEDE9 !important;
+  font-style: italic;
+  font-size: medium;
+}
+
+.google-btn ion-icon {
+  color: red;
+}

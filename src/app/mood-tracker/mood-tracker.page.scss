@@ -1,0 +1,71 @@
+.mood-emojis {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px; // spacing between the emojis
+    padding: 10px 0px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+  
+  .mood-emojis ion-button {
+    --padding-start: 0;
+    --padding-end: 0;
+    --padding-top: 0;
+    --padding-bottom: 0;
+    background: transparent;
+    box-shadow: none;
+    border-radius: 50%;
+    width: 65px;
+    height: 65px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .mood-emojis img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+  }
+  
+  .mood-emojis img.selected {
+    transform: scale(1.1);
+    border: 5px solid #84A98C;
+    box-sizing: border-box;
+  }
+  
+  .mood-labels {
+    text-align: center;
+    margin-top: 20px;
+    background-color: #84A98C;
+    padding: 20px 20px;
+    border-radius: 10px;
+    color: #1B4965;
+    font-weight: 500;
+    font-size: 20px;
+    width: 80%;
+    margin: 30px auto;
+  }
+  
+  .mood-calendar {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+    
+  .mood-bar {
+    display: flex;
+    justify-content: space-around;
+    background: linear-gradient(to right, #f80404, yellow, #17c517);
+    border-radius: 15px;
+    padding: 10px;
+    width: 90%;
+    height: 20px;
+    margin: 0 auto;
+  }
+  
+
+  

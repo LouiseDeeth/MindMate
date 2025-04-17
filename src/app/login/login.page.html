@@ -1,0 +1,38 @@
+<ion-content class="login-background" fullscreen>
+  <div id="container" class="auth-container">
+    <div class="app-branding">
+      <img src="assets/images/Logo.png" alt="MindMate Logo" class="app-logo" />
+      <h2 class="app-title">MindMate</h2>
+    </div>
+
+    <h3 class="auth-title">Log in or continue as Guest</h3>
+
+    <ion-item class="auth-input" lines="none">
+      <ion-input type="email" placeholder="enter email" [(ngModel)]="email" required autocapitalize="off" autocomplete="email"></ion-input>
+    </ion-item>
+
+    <ion-item class="auth-input" lines="none">
+      <ion-input type="password" placeholder="enter password" [(ngModel)]="password" required autocapitalize="off" autocomplete="current-password"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" class="login-btn" (click)="login()">Login</ion-button>
+
+    <div class="divider">
+      <span>or</span>
+    </div>
+
+    <h1 class="sign-up-title">Sign up</h1>
+
+    <ion-button expand="block" class="auth-alt-btn" [routerLink]="['/email-signup']">
+      <ion-icon slot="start" name="mail-outline"></ion-icon>
+      Continue with email
+    </ion-button>
+    <ion-button expand="block" class="auth-alt-btn google-btn">
+      <ion-icon slot="start" name="logo-google"></ion-icon>
+      Continue with Google
+    </ion-button>
+    <ion-button expand="block" class="auth-alt-btn">Continue as guest</ion-button>
+
+  </div>
+</ion-content>
+

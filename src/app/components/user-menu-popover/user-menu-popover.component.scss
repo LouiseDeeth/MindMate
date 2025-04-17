@@ -1,0 +1,47 @@
+:host {
+    display: block;
+    width: 100%;
+  }
+  ::ng-deep .popover-wrapper {
+    --background: transparent !important;
+    box-shadow: none !important;
+    margin: 0 auto;
+  }
+  .custom-popover .popover-content {
+    --background: #d9d9d9 !important;
+    border-radius: 20px !important;
+    padding: 20px 16px !important;
+    width: 300px !important;
+    max-width: 95vw !important;    
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: stretch !important;
+    gap: 12px !important;
+  }
+  .popover-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: center;
+    padding: 10px;
+  }
+  .popover-button {
+    --background: #7d9979;
+    --background-activated: #6c8b6a;
+    --color: white;
+    --border-radius: 12px;
+    text-transform: none;
+    height: 40px;
+    width: 95%;
+    font-weight: 500;
+    align-items: center;
+    justify-content: center;
+  }
+  .popover-button.danger {
+    --background: #d9534f; // red for logout
+  }
+  
+  
+
+

@@ -1,20 +1,58 @@
-<ion-header [translucent]="true">
+<ion-header class="help-header">
   <ion-toolbar>
-    <ion-title>
-      Blank
-    </ion-title>
+   
   </ion-toolbar>
 </ion-header>
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Blank</ion-title>
-    </ion-toolbar>
-  </ion-header>
+<ion-content class="gray-background" fullscreen>
+  
+      <!-- Profile button in the top-right corner -->
+        <ion-chip class="homepage-profile-icon " (click)="openUserMenu($event)">
+          <ion-label>GH</ion-label>
+        </ion-chip>
 
-  <div id="container">
-    <strong>Ready to create an app?</strong>
-    <p>Start with Ionic <a target="_blank" rel="noopener noreferrer" href="https://ionicframework.com/docs/components">UI Components</a></p>
+  <div id="container" class="home-container">
+    
+    <div class="app-branding">
+      <img src="assets/images/Logo.png" alt="MindMate Logo" class="app-logo" />
+      <h2 class="app-title">MindMate</h2>
+    </div>
+    
+    <img [src]="selectedImage" alt="Selected Image" class="homepage-image" />
+
+    <ion-button class="begin-chat-btn" expand="block" routerLink="/chat" >
+      Begin Chat
+    </ion-button>
+
+    <ion-grid class="nav-grid">
+      <ion-row class="ion-justify-content-around">
+        <ion-col size="4" class="ion-text-center">
+          <ion-button class="nav-btn" fill="clear" routerLink="/meditation">
+            <div class="nav-icon-text">
+              <img class="nav-image" src="assets/images/Meditation.webp" alt="Meditation Icon" />
+              <div>Meditation</div>
+            </div>
+          </ion-button>
+        </ion-col>
+
+        <ion-col size="4" class="ion-text-center">
+          <ion-button class="nav-btn" fill="clear" routerLink="/mood-tracker">
+            <div class="nav-icon-text">
+              <img class="nav-image" src="assets/images/Smiley.png" alt="Mood Tracking Icon" />
+              <div>Mood Tracking</div>
+            </div>
+          </ion-button>
+        </ion-col>
+
+        <ion-col size="4" class="ion-text-center">
+          <ion-button class="nav-btn" fill="clear" routerLink="/help-numbers">
+            <div class="nav-icon-text">
+              <img class="nav-image" src="assets/images/Help.jpg" alt="Help Numbers Icon" />
+              <div>Help Numbers</div>
+            </div>
+          </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
 </ion-content>

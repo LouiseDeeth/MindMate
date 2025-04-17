@@ -1,0 +1,33 @@
+.grid-picture {
+    width: 90%;
+    border-radius: 10px;
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  img.selected {
+    border: 4px solid #84A98C;
+    transform: scale(1.05);
+  }
+  
+  .confirm-picture-btn {
+    --background: #1B4965 !important;
+    color: white !important;
+    font-weight: 500;
+    border-radius: 10px;
+    text-transform: none;
+    --padding-top: 14px;
+    --padding-bottom: 14px;
+    width: 50%;
+  }
+  
+  .button-center {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .picture-col {
+    display: flex;
+    justify-content: center;
+  }
+  
