@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { UserMenuPopoverComponent } from '../components/user-menu-popover/user-menu-popover.component';
 import { IonicModule, PopoverController } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-home',
@@ -11,19 +12,31 @@ import { Router } from '@angular/router';
   standalone: true,
   imports: [IonicModule, UserMenuPopoverComponent, RouterLink],
 })
-export class HomePage {
+export class HomePage implements OnInit {
+  isGuest = false;
   userInitials = 'GH'; // Placeholder for the users initials - I need to implement this later
-
   selectedImage: string = '';
 
-  ngOnInit() {
-    this.selectedImage = localStorage.getItem('selectedImage') || 'assets/images/Picture7.jpg';
-  }
-  
   constructor(private popoverCtrl: PopoverController,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) {}
 
+  ngOnInit() {
+    // Set the homepage image
+    this.selectedImage = localStorage.getItem('selectedImage') || 'assets/images/Picture7.jpg';
+
+    // Check if user is anonymous
+    this.authService.getCurrentUser().subscribe(user => {
+      this.isGuest = !!user?.isAnonymous;
+    });
+  }
+
+  goToLogin() {
+    this.router.navigate(['/login']);
+  }
+  
+  // Function to open the user menu popover
   async openUserMenu(ev: any) {
     const popover = await this.popoverCtrl.create({
       component: UserMenuPopoverComponent,
