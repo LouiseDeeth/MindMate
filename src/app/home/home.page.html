@@ -1,32 +1,39 @@
-<ion-header class="help-header">
+<ion-header class="home-header">
   <ion-toolbar>
-   
+
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="gray-background" fullscreen>
-  
-      <!-- Profile button in the top-right corner -->
-        <ion-chip class="homepage-profile-icon " (click)="openUserMenu($event)">
-          <ion-label>GH</ion-label>
-        </ion-chip>
+
+  <!-- Back button -->
+  <ion-button fill="clear" class="back-to-login-btn" (click)="goToLogin()">
+    <ion-icon name="arrow-back-outline" slot="start"></ion-icon></ion-button>
+
+  <!-- Profile button in the top-right corner -->
+  <ion-chip *ngIf="!isGuest" class="homepage-profile-icon" (click)="openUserMenu($event)">
+    <ion-label>GH</ion-label>
+  </ion-chip>
 
   <div id="container" class="home-container">
-    
+
+    <!-- App Branding -->
     <div class="app-branding">
       <img src="assets/images/Logo.png" alt="MindMate Logo" class="app-logo" />
       <h2 class="app-title">MindMate</h2>
     </div>
-    
+
     <img [src]="selectedImage" alt="Selected Image" class="homepage-image" />
 
-    <ion-button class="begin-chat-btn" expand="block" routerLink="/chat" >
+    <ion-button class="begin-chat-btn" expand="block" routerLink="/chat">
       Begin Chat
     </ion-button>
 
     <ion-grid class="nav-grid">
       <ion-row class="ion-justify-content-around">
-        <ion-col size="4" class="ion-text-center">
+
+        <!-- Meditation: Always visible -->
+        <ion-col size="6" class="ion-text-center">
           <ion-button class="nav-btn" fill="clear" routerLink="/meditation">
             <div class="nav-icon-text">
               <img class="nav-image" src="assets/images/Meditation.webp" alt="Meditation Icon" />
@@ -35,20 +42,22 @@
           </ion-button>
         </ion-col>
 
-        <ion-col size="4" class="ion-text-center">
-          <ion-button class="nav-btn" fill="clear" routerLink="/mood-tracker">
-            <div class="nav-icon-text">
-              <img class="nav-image" src="assets/images/Smiley.png" alt="Mood Tracking Icon" />
-              <div>Mood Tracking</div>
-            </div>
-          </ion-button>
-        </ion-col>
-
-        <ion-col size="4" class="ion-text-center">
+        <!-- Help Numbers: Always visible -->
+        <ion-col size="6" class="ion-text-center">
           <ion-button class="nav-btn" fill="clear" routerLink="/help-numbers">
             <div class="nav-icon-text">
               <img class="nav-image" src="assets/images/Help.jpg" alt="Help Numbers Icon" />
               <div>Help Numbers</div>
+            </div>
+          </ion-button>
+        </ion-col>
+
+        <!-- Mood Tracking: Only if NOT guest -->
+        <ion-col size="6" class="ion-text-center" *ngIf="!isGuest">
+          <ion-button class="nav-btn" fill="clear" routerLink="/mood-tracker">
+            <div class="nav-icon-text">
+              <img class="nav-image" src="assets/images/Smiley.png" alt="Mood Tracking Icon" />
+              <div>Mood Tracking</div>
             </div>
           </ion-button>
         </ion-col>
