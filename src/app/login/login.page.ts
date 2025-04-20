@@ -42,6 +42,17 @@ export class LoginPage implements OnInit {
       .catch(err => console.error('❌ Guest login failed:', err));
   }
 
+  continueWithGoogle() {
+    this.authService.signInWithGoogle()
+      .then(res => {
+        console.log('✅ Logged in with Google:', res.user?.email);
+        this.router.navigate(['/home']);
+      })
+      .catch(err => {
+        console.error('❌ Google sign-in failed:', err.message);
+      });
+  }  
+
   goToSignup() {
     this.router.navigate(['/email-signup']);
   }
