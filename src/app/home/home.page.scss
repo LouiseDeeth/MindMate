@@ -21,6 +21,10 @@
   text-decoration: none;
 }
 
+.home-container {
+  padding-top: 80px; 
+}
+
 // This is the Chat button on the home page
 .begin-chat-btn {
   --background: #84A98C !important;
@@ -81,7 +85,7 @@
 }
 
 .back-to-login-btn {
-  --position: absolute  !important;
+  position: absolute;
   top: 20px;
   left: 16px;
   z-index: 10;
