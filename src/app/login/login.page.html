@@ -1,3 +1,9 @@
+<ion-header class="login-header">
+  <ion-toolbar>
+
+  </ion-toolbar>
+</ion-header>
+
 <ion-content class="login-background" fullscreen>
   <div id="container" class="auth-container">
 
@@ -34,7 +40,7 @@
       Continue with email
     </ion-button>
 
-    <ion-button expand="block" class="auth-alt-btn google-btn">
+    <ion-button expand="block" class="auth-alt-btn google-btn" (click)="continueWithGoogle()">
       <ion-icon slot="start" name="logo-google"></ion-icon>
       Continue with Google
     </ion-button>

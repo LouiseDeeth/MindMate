@@ -30,10 +30,10 @@
     </ion-button>
 
     <ion-grid class="nav-grid">
-      <ion-row class="ion-justify-content-around">
+      <ion-row class="ion-justify-content-between">
 
         <!-- Meditation: Always visible -->
-        <ion-col size="6" class="ion-text-center">
+        <ion-col size="4" class="ion-text-center">
           <ion-button class="nav-btn" fill="clear" routerLink="/meditation">
             <div class="nav-icon-text">
               <img class="nav-image" src="assets/images/Meditation.webp" alt="Meditation Icon" />
@@ -43,7 +43,7 @@
         </ion-col>
 
         <!-- Help Numbers: Always visible -->
-        <ion-col size="6" class="ion-text-center">
+        <ion-col size="4" class="ion-text-center">
           <ion-button class="nav-btn" fill="clear" routerLink="/help-numbers">
             <div class="nav-icon-text">
               <img class="nav-image" src="assets/images/Help.jpg" alt="Help Numbers Icon" />
@@ -53,7 +53,7 @@
         </ion-col>
 
         <!-- Mood Tracking: Only if NOT guest -->
-        <ion-col size="6" class="ion-text-center" *ngIf="!isGuest">
+        <ion-col size="4" class="ion-text-center" *ngIf="!isGuest">
           <ion-button class="nav-btn" fill="clear" routerLink="/mood-tracker">
             <div class="nav-icon-text">
               <img class="nav-image" src="assets/images/Smiley.png" alt="Mood Tracking Icon" />

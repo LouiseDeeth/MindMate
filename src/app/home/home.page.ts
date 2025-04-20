@@ -4,13 +4,14 @@ import { IonicModule, PopoverController } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-home',
   templateUrl: 'home.page.html',
   styleUrls: ['home.page.scss'],
   standalone: true,
-  imports: [IonicModule, UserMenuPopoverComponent, RouterLink],
+  imports: [IonicModule, UserMenuPopoverComponent, RouterLink, CommonModule],
 })
 export class HomePage implements OnInit {
   isGuest = false;
