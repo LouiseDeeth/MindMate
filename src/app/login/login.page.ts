@@ -26,7 +26,7 @@ export class LoginPage implements OnInit {
     this.authService.signIn(this.email, this.password)
       .then(res => {
         console.log('✅ Logged in as:', res.user?.email);
-        // You could also route to the home page or show a toast
+        this.router.navigate(['/home']); 
       })
       .catch(err => {
         console.error('❌ Login error:', err.message);

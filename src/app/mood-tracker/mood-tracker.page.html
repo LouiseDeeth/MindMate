@@ -6,7 +6,7 @@
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-chip *ngIf="!isGuest" class="homepage-profile-icon" (click)="openUserMenu($event)">
+      <ion-chip *ngIf="!isGuest" class="profile-icon" (click)="openUserMenu($event)">
         <ion-label>{{ userInitials || 'NA' }}</ion-label>
       </ion-chip>
     </ion-buttons>
@@ -37,7 +37,30 @@
     <ion-datetime
       presentation="date"
       [(ngModel)]="selectedDate"
+      (ionChange)="onDateChange()"
+      [highlightedDates]="getHighlightedDates()"
       class="calendar-picker">
     </ion-datetime>
+  </div>
+  
+  <!-- Mood History Section -->
+  <div class="mood-history">
+    <h3>Your Mood History</h3>
+    
+    <div class="empty-state" *ngIf="objectKeys(moodDates).length === 0">
+      <p>You haven't recorded any moods yet.</p>
+    </div>
+    
+    <ion-list *ngIf="objectKeys(moodDates).length > 0">
+      <ion-item *ngFor="let entry of getMoodHistoryEntries()">
+        <ion-label>
+          <h2>{{ entry.date | date:'longDate' }}</h2>
+          <p>Mood: {{ moods[entry.moodIndex].label }}</p>
+        </ion-label>
+        <ion-thumbnail slot="end">
+          <img [src]="moods[entry.moodIndex].icon" [alt]="moods[entry.moodIndex].label">
+        </ion-thumbnail>
+      </ion-item>
+    </ion-list>
   </div>
 </ion-content>

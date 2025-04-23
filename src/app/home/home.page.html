@@ -4,7 +4,7 @@
       <ion-back-button default-href="/login" (click)="goToLogin()"></ion-back-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-chip *ngIf="!isGuest" class="homepage-profile-icon" (click)="openUserMenu($event)">
+      <ion-chip *ngIf="!isGuest" class="profile-icon" (click)="openUserMenu($event)">
         <ion-label>{{ userInitials || 'NA' }}</ion-label>
       </ion-chip>
     </ion-buttons>

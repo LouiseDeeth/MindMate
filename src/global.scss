@@ -116,10 +116,15 @@ ion-content {
 // Profile icon styling
 .profile-icon {
   background-color: #84A98C;
+  color: white;
   font-weight: 600;
   border-radius: 25px;
   padding: 0 12px;
   height: 45px;
+  position: absolute;
+  top: var(--header-top-padding);
+  right: 16px;
+  display: flex;
 }
 
 // Back button styling
