@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserMenuPopoverComponent } from '../components/user-menu-popover/user-menu-popover.component';
-import { IonicModule, PopoverController } from '@ionic/angular';
+import { IonicModule, PopoverController, ViewWillEnter  } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import { AuthService } from '../services/auth.service';
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [IonicModule, UserMenuPopoverComponent, RouterLink, CommonModule],
 })
-export class HomePage implements OnInit {
+export class HomePage implements OnInit, ViewWillEnter  {
   isGuest = false;
   userInitials = 'NA'; // Placeholder for the users initials 
   selectedImage: string = '';
@@ -48,6 +48,11 @@ export class HomePage implements OnInit {
 
       }
     });
+  }
+
+  ionViewWillEnter() {
+    // Reload the image when returning to home
+    this.selectedImage = localStorage.getItem('selectedImage') || 'assets/images/Picture7.jpg';
   }
 
     // Function to generate the users initials 
