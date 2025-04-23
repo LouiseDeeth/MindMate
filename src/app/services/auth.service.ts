@@ -39,4 +39,18 @@ export class AuthService {
   logOut() {
     return signOut(this.auth);
   }
+  getUserInitials(user: any): string {
+    if (user?.displayName) {
+      const nameParts = user.displayName.split(' ');
+      if (nameParts.length >= 2) {
+        return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
+      } else if (nameParts.length === 1) {
+        return nameParts[0].substring(0, 2).toUpperCase();
+      }
+    } else if (user?.email) {
+      const emailName = user.email.split('@')[0];
+      return emailName.substring(0, 2).toUpperCase();
+    }
+    return 'NA';
+  }
 }

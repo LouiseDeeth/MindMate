@@ -1,19 +1,17 @@
-<ion-header class="home-header">
+<ion-header>
   <ion-toolbar>
-
+    <ion-buttons slot="start">
+      <ion-back-button default-href="/login" (click)="goToLogin()"></ion-back-button>
+    </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-chip *ngIf="!isGuest" class="homepage-profile-icon" (click)="openUserMenu($event)">
+        <ion-label>{{ userInitials || 'NA' }}</ion-label>
+      </ion-chip>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content class="gray-background" fullscreen>
-
-  <!-- Back button -->
-  <ion-button fill="clear" class="back-to-login-btn" (click)="goToLogin()">
-    <ion-icon name="arrow-back-outline" slot="start"></ion-icon></ion-button>
-
-  <!-- Profile button in the top-right corner -->
-  <ion-chip *ngIf="!isGuest" class="homepage-profile-icon" (click)="openUserMenu($event)">
-    <ion-label>GH</ion-label>
-  </ion-chip>
 
   <div id="container" class="home-container">
 
@@ -42,6 +40,16 @@
           </ion-button>
         </ion-col>
 
+        <!-- Mood Tracking: Only if NOT guest -->
+        <ion-col size="4" class="ion-text-center" *ngIf="!isGuest">
+          <ion-button class="nav-btn" fill="clear" routerLink="/mood-tracker">
+            <div class="nav-icon-text">
+              <img class="nav-image" src="assets/images/Smiley.png" alt="Mood Tracking Icon" />
+              <div>Mood Tracking</div>
+            </div>
+          </ion-button>
+        </ion-col>
+
         <!-- Help Numbers: Always visible -->
         <ion-col size="4" class="ion-text-center">
           <ion-button class="nav-btn" fill="clear" routerLink="/help-numbers">
@@ -52,15 +60,6 @@
           </ion-button>
         </ion-col>
 
-        <!-- Mood Tracking: Only if NOT guest -->
-        <ion-col size="4" class="ion-text-center" *ngIf="!isGuest">
-          <ion-button class="nav-btn" fill="clear" routerLink="/mood-tracker">
-            <div class="nav-icon-text">
-              <img class="nav-image" src="assets/images/Smiley.png" alt="Mood Tracking Icon" />
-              <div>Mood Tracking</div>
-            </div>
-          </ion-button>
-        </ion-col>
       </ion-row>
     </ion-grid>
   </div>

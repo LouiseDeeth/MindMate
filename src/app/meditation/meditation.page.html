@@ -1,23 +1,19 @@
 <ion-header class="help-header">
   <ion-toolbar>
-   
-  </ion-toolbar>
-</ion-header>
-
-<ion-content class="gray-background" fullscreen>
-
-  <div class="page-top-container">
     <ion-buttons slot="start">
       <ion-button routerLink="/home">
         <img src="assets/images/Home.png" alt="Home Icon" class="home-icon" />
       </ion-button>
     </ion-buttons>
     <ion-buttons slot="end">
-      <ion-chip class="profile-icon">
-        <ion-label>GH</ion-label>
+      <ion-chip *ngIf="!isGuest" class="homepage-profile-icon" (click)="openUserMenu($event)">
+        <ion-label>{{ userInitials || 'NA' }}</ion-label>
       </ion-chip>
     </ion-buttons>
-  </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="gray-background" fullscreen>
 
   <div class="app-branding">
     <img src="assets/images/Logo.png" alt="MindMate Logo" class="app-logo" />
