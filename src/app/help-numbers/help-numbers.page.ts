@@ -3,6 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 import { RouterLink } from '@angular/router';
+import { AuthService } from '../services/auth.service';
+import { PopoverController } from '@ionic/angular';
+import { Router } from '@angular/router';
+import { UserMenuPopoverComponent } from '../components/user-menu-popover/user-menu-popover.component';
 
 @Component({
   selector: 'app-help-numbers',
@@ -13,9 +17,55 @@ import { RouterLink } from '@angular/router';
 })
 export class HelpNumbersPage implements OnInit {
 
-  constructor() { }
+  isGuest = false;
+  userInitials = 'NA';
+
+  constructor(
+    private authService: AuthService,
+    private popoverCtrl: PopoverController,
+    private router: Router
+  ) {}
 
   ngOnInit() {
-  }
+    console.log('Checking user for Help page...');
 
+    this.authService.getCurrentUser().subscribe(user => {
+      console.log('Current user:', user);
+      this.isGuest = !!user?.isAnonymous;
+      console.log('Is guest:', this.isGuest);
+
+      if (!this.isGuest && user) {
+        this.userInitials = this.authService.getUserInitials(user);
+        console.log('User initials:', this.userInitials);
+      }
+    });
+  }
+  // Function to open the user menu popover
+  async openUserMenu(ev: any) {
+    const popover = await this.popoverCtrl.create({
+      component: UserMenuPopoverComponent,
+      event: ev,
+      translucent: true,
+      cssClass: 'custom-popover',
+      backdropDismiss: true,
+      componentProps: {
+        userInitials: this.userInitials // Pass initials to popover
+      }
+    });
+
+    await popover.present();
+
+    const { data } = await popover.onDidDismiss();
+
+    if (data?.action === 'choose-picture') {
+      // Choose a picture
+      this.router.navigate(['/choose-picture']);
+    } else if (data?.action === 'update-details') {
+      // Navigate to the edit page
+    } else if (data?.action === 'logout') {
+      // Logout 
+      localStorage.clear();
+      this.router.navigate(['/login']);
+    }
+  }
 }

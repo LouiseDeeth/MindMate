@@ -8,9 +8,14 @@
 </ion-header>
 
 <ion-content class="gray-background chat-content" [scrollEvents]="true">
-  <div class="chat-messages">
-    <div *ngFor="let msg of messages" [ngClass]="msg.role === 'user' ? 'user-bubble' : 'bot-bubble'">
-      <p>{{ msg.content }}</p>
+  <div *ngFor="let msg of messages">
+    <div class="message-row" [ngClass]="msg.role">
+      <div *ngIf="msg.role === 'assistant'" class="bubble-avatar">
+        <img src="assets/images/Logo.png" alt="MindMate">
+      </div>
+      <div [ngClass]="msg.role === 'user' ? 'user-bubble' : 'bot-bubble'">
+        <p>{{ msg.content }}</p>
+      </div>
     </div>
   </div>
 </ion-content>

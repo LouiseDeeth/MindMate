@@ -93,6 +93,18 @@ ion-content {
   margin-top: 1px;
 }
 
+.nav-grid ion-row {
+  display: flex !important;
+  flex-direction: row !important; // Force a horizontal layout
+  flex-wrap: nowrap !important;
+}
+
+.nav-grid ion-col {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+}
+
 // Home icon styling
 .home-icon {
   width: 50px;
@@ -116,9 +128,8 @@ ion-back-button {
   --color: black;
 }
 
-.page-top-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 16px;
+.page-wrapper {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
+
