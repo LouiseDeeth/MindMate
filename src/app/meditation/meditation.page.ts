@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { IonicModule } from '@ionic/angular';
+import { IonicModule, ModalController } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -7,13 +7,20 @@ import { AuthService } from '../services/auth.service';
 import { PopoverController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { UserMenuPopoverComponent } from '../components/user-menu-popover/user-menu-popover.component';
+import { BreathingModalComponent } from '../modals/breathing-modal/breathing-modal.component';
 
 @Component({
   selector: 'app-meditation',
   templateUrl: './meditation.page.html',
   styleUrls: ['./meditation.page.scss'],
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule, RouterModule],
+  imports: [
+    IonicModule,
+    CommonModule,
+    FormsModule,
+    RouterModule,
+    BreathingModalComponent
+  ],
 })
 export class MeditationPage implements OnInit {
 
@@ -23,8 +30,9 @@ export class MeditationPage implements OnInit {
   constructor(
     private authService: AuthService,
     private popoverCtrl: PopoverController,
-    private router: Router
-  ) {}
+    private router: Router,
+    private modalController: ModalController
+  ) { }
 
   selectedImage: string = '';
 
@@ -43,6 +51,7 @@ export class MeditationPage implements OnInit {
       }
     });
   }
+
   // Function to open the user menu popover
   async openUserMenu(ev: any) {
     const popover = await this.popoverCtrl.create({
@@ -52,7 +61,7 @@ export class MeditationPage implements OnInit {
       cssClass: 'custom-popover',
       backdropDismiss: true,
       componentProps: {
-        userInitials: this.userInitials // Pass initials to popover
+        userInitials: this.userInitials
       }
     });
 
@@ -70,5 +79,25 @@ export class MeditationPage implements OnInit {
       localStorage.clear();
       this.router.navigate(['/login']);
     }
+  }
+
+  // Open the breathing exercise modal
+  async openBreathingExercises() {
+    const modal = await this.modalController.create({
+      component: BreathingModalComponent,
+      cssClass: 'breathing-modal'
+    });
+
+    return await modal.present();
+  }
+
+  // For the guided meditation button (placeholder for now)
+  startGuidedMeditation() {
+    console.log('Starting guided meditation...');
+  }
+
+  // For the relaxing music button (placeholder for now)
+  playRelaxingMusic() {
+    console.log('Playing relaxing music...');
   }
 }

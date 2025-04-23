@@ -1,7 +1,8 @@
 export const environment = {
   production: true,
-  openAiApiKey: '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',
-  openAiOrgId: 'org-lhY2VC5U2ksVpJEak5RuOWGx',
+  claudeApiKey: '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',
+  //openAiOrgId: 'org-lhY2VC5U2ksVpJEak5RuOWGx'
+  backendUrl: 'https://us-central1-mindmate-cc00b.cloudfunctions.net/claudeProxy',
   firebase: {
     apiKey: 'AIzaSyBj537_opXLI5cLFDDrS7bBDSZOc_c-6kk',
     authDomain: 'mindmate-cc00b.firebaseapp.com',
