@@ -173,11 +173,6 @@ export class MoodTrackerPage implements OnInit {
         console.log('User initials:', this.userInitials);
 
         this.selectedDate = new Date().toISOString().split('T')[0];
-
-        // Commented out to restore working state:
-        // this.loadAllMoodDates().then(() => {
-        //   this.loadMoodForSelectedDate();
-        // });
       }
     });
   }
@@ -208,18 +203,5 @@ export class MoodTrackerPage implements OnInit {
       localStorage.clear();
       this.router.navigate(['/login']);
     }
-  }
-
-  getMoodHistoryEntries() {
-    const entries = [];
-
-    for (const [dateStr, moodIndex] of Object.entries(this.moodDates)) {
-      entries.push({
-        date: new Date(dateStr),
-        moodIndex: moodIndex
-      });
-    }
-
-    return entries.sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 }
