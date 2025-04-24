@@ -45,13 +45,13 @@
       <ion-label>{{ response }}</ion-label>
     </ion-chip>
   </div>
-  <ion-toolbar>
+  <div class="message-input-container">
     <ion-input #chatInput [(ngModel)]="userInput" placeholder="Message..." class="chat-input" inputmode="text"
       (keyup.enter)="sendMessage()"></ion-input>
-    <ion-buttons slot="end">
-      <ion-button (click)="sendMessage()" [disabled]="!userInput.trim()" fill="clear" class="send-btn">
+    <div class="send-button-wrapper">
+      <ion-button (click)="sendMessage()" [disabled]="!userInput.trim()" class="send-btn">
         <ion-icon name="send" slot="icon-only"></ion-icon>
       </ion-button>
-    </ion-buttons>
-  </ion-toolbar>
+    </div>
+  </div>
 </ion-footer>

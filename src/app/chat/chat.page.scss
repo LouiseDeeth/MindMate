@@ -40,17 +40,6 @@
   word-wrap: break-word;
 }
 
-.send-btn {
-  --background: #84A98C;
-  --border-radius: 50%;
-  width: 40px;
-  height: 40px;
-}
-
-::ng-deep .send-btn ion-icon {
-  color: #84A98C !important;
-}
-
 .chat-content {
   --padding-bottom: 70px;
   --background: #D9D9D9;
@@ -71,30 +60,57 @@
   background: #D9D9D9;
 }
 
-.send-btn {
-  background: white !important;
-  border-radius: 50%;
+.message-input-container {
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 0 10px 10px;
+  width: 100%;
 }
 
 .chat-input {
   flex: 1;
   --padding-start: 20px;
-  --padding-end: 12px;
+  --padding-end: 50px; /* Make room for the button */
   background: #EDEDE9;
   border-radius: 16px;
-  margin-right: 10px;
-  padding: 0 12px;
   height: 40px;
+  --highlight-color-focused: transparent;
+  --highlight-height: 0;
   border: none !important;
   box-shadow: none !important;
   --highlight-color-focused: transparent !important;
   --highlight-height: 0 !important;
+  color: #1B4965;
+}
+
+.send-button-wrapper {
+  position: absolute;
+  right: 15px;
+  z-index: 10;
+}
+
+.send-btn {
+  --background: transparent;
+  --border-radius: 50%;
+  --padding-start: 0;
+  --padding-end: 0;
+  --box-shadow: none;
+  margin: 0;
+  height: 36px;
+  width: 36px;
+}
+
+.send-btn ion-icon {
+  color: #84A98C;
+  font-size: 20px;
 }
 
 ion-input::part(native) {
   border: none !important;
   outline: none !important;
   box-shadow: none !important;
+  padding-right: 40px;
 }
 
 ion-input:focus-within::part(native) {
@@ -120,6 +136,15 @@ ion-footer {
   border: none !important;
   box-shadow: none !important;
   --background: #D9D9D9 !important;
+}
+
+/* Override any Ionic default styles */
+ion-footer.chat-footer ion-toolbar {
+  --padding-start: 0;
+  --padding-end: 0;
+  --padding-top: 0;
+  --padding-bottom: 0;
+  --min-height: auto;
 }
 
 .profile-picture-icon {
@@ -235,7 +260,6 @@ ion-footer {
 }
 
 @keyframes typing {
-
   0%,
   100% {
     transform: translateY(0px);
