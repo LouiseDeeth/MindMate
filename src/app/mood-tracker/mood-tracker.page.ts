@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, NgZone, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -8,7 +8,6 @@ import { PopoverController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { UserMenuPopoverComponent } from '../components/user-menu-popover/user-menu-popover.component';
 import { MoodService } from '../services/mood.service';
-import { Firestore, collection, getDocs } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-mood-tracker',
@@ -18,18 +17,17 @@ import { Firestore, collection, getDocs } from '@angular/fire/firestore';
   imports: [IonicModule, CommonModule, FormsModule, RouterLink, UserMenuPopoverComponent],
 })
 export class MoodTrackerPage implements OnInit {
+  private authService = inject(AuthService);
+  private popoverCtrl = inject(PopoverController);
+  private router = inject(Router);
+  private moodService = inject(MoodService);
+  private ngZone = inject(NgZone);
+
   userInitials = 'NA';
   isGuest = false;
 
-  constructor(
-    private authService: AuthService,
-    private popoverCtrl: PopoverController,
-    private router: Router,
-    private moodService: MoodService,
-    private firestore: Firestore
-  ) { }
+  selectedDate: string = new Date().toISOString().split('T')[0];
 
-  selectedDate: string = new Date().toISOString();
   moods = [
     { label: 'Angry', icon: 'assets/images/angry.png' },
     { label: 'Sad', icon: 'assets/images/sad.png' },
@@ -37,40 +35,78 @@ export class MoodTrackerPage implements OnInit {
     { label: 'Happy', icon: 'assets/images/happy.png' },
     { label: 'Excited', icon: 'assets/images/excited.png' }
   ];
-  selectedMood: number = 2;
+
+  selectedMood: number | null = null;
   moodDates: { [date: string]: number } = {};
+  highlightedDates: any[] = [];
+  isLoading = false;
+
+  constructor() {}
 
   async selectMood(index: number) {
     this.selectedMood = index;
-    console.log(`Selected mood: ${this.moods[index].label} on ${this.selectedDate}`);
+    const formattedDate = this.formatDate(this.selectedDate);
 
-    // Save the mood selection if user is logged in
     if (!this.isGuest) {
+      this.isLoading = true;
+
       try {
         await this.moodService.saveMood(this.selectedDate, index);
-        console.log('Mood saved successfully!');
-      } catch (error) {
-        console.error('Error saving mood:', error);
+        this.ngZone.run(() => {
+          console.log(`Mood saved successfully!`);
+          this.moodDates[formattedDate] = index;
+          this.updateHighlightedDates();
+        });
+      } catch (err) {
+        console.error('Error saving mood:', err);
+      } finally {
+        this.isLoading = false;
       }
-    } else {
-      console.log('Guest users cannot save moods');
     }
   }
 
-  // When the date changes, load the mood for that date
-  async onDateChange() {
-    this.loadMoodForSelectedDate();
+  private formatDate(dateString: string): string {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0];
+  }
+
+  async onDateChange(event: any) {
+    if (this.isLoading) return;
+    this.isLoading = true;
+
+    try {
+      const newDate = event?.detail?.value || this.selectedDate;
+      console.log('Date changed to:', newDate);
+
+      this.ngZone.run(async () => {
+        this.selectedDate = newDate;
+        await this.loadMoodForSelectedDate();
+      });
+    } catch (error) {
+      console.error('Error in date change:', error);
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async loadMoodForSelectedDate() {
-    if (this.isGuest) return;
+    const formattedDate = this.formatDate(this.selectedDate);
+    console.log('Looking for mood on date:', formattedDate);
 
     try {
-      const moodIndex = await this.moodService.getMoodForDate(this.selectedDate);
-      this.selectedMood = moodIndex;
-      console.log('Loaded mood for date:', this.selectedDate, 'Mood:', moodIndex !== null ? this.moods[moodIndex].label : 'None');
-    } catch (error) {
-      console.error('Error loading mood:', error);
+      const mood = await this.moodService.getMoodForDate(this.selectedDate);
+
+      this.ngZone.run(() => {
+        if (mood !== null) {
+          console.log(`Loaded mood for date: ${formattedDate} Mood: ${mood}`);
+          this.selectedMood = mood;
+        } else {
+          console.log(`No mood found for date: ${formattedDate}`);
+          this.selectedMood = null;
+        }
+      });
+    } catch (err) {
+      console.error('Failed to load mood:', err);
     }
   }
 
@@ -78,17 +114,44 @@ export class MoodTrackerPage implements OnInit {
     if (this.isGuest) return;
 
     try {
-      // Use your MoodService to get all moods
       const moodsData = await this.moodService.getAllMoods();
-      this.moodDates = moodsData;
-      console.log('Loaded all mood dates:', this.moodDates);
+
+      this.ngZone.run(() => {
+        this.moodDates = moodsData;
+        console.log('Loaded all mood dates:', this.moodDates);
+        this.updateHighlightedDates();
+      });
     } catch (error) {
       console.error('Error loading mood dates:', error);
     }
   }
 
+  updateHighlightedDates() {
+    this.highlightedDates = [];
+
+    for (const [dateStr, moodIndex] of Object.entries(this.moodDates)) {
+      let color;
+      switch (moodIndex) {
+        case 0: color = 'red'; break;
+        case 1: color = 'orange'; break;
+        case 2: color = 'yellow'; break;
+        case 3: color = 'lightgreen'; break;
+        case 4: color = 'green'; break;
+        default: color = 'blue';
+      }
+
+      this.highlightedDates.push({
+        date: dateStr,
+        textColor: '#ffffff',
+        backgroundColor: color
+      });
+    }
+
+    console.log('Updated highlighted dates');
+  }
+
   ngOnInit() {
-    console.log('Checking user for Mood-Tracker page...');
+    console.log('Initializing Mood-Tracker page...');
 
     this.authService.getCurrentUser().subscribe(user => {
       console.log('Current user:', user);
@@ -96,7 +159,6 @@ export class MoodTrackerPage implements OnInit {
       console.log('Is guest:', this.isGuest);
 
       if (!this.isGuest && user) {
-        // Get user initials
         if (user.displayName) {
           const nameParts = user.displayName.split(' ');
           if (nameParts.length >= 2) {
@@ -110,11 +172,12 @@ export class MoodTrackerPage implements OnInit {
         }
         console.log('User initials:', this.userInitials);
 
-        // Load mood for today
-        this.loadMoodForSelectedDate();
+        this.selectedDate = new Date().toISOString().split('T')[0];
 
-        // Load all mood dates
-        this.loadAllMoodDates();
+        // Commented out to restore working state:
+        // this.loadAllMoodDates().then(() => {
+        //   this.loadMoodForSelectedDate();
+        // });
       }
     });
   }
@@ -123,7 +186,6 @@ export class MoodTrackerPage implements OnInit {
     return Object.keys(obj);
   }
 
-  // Function to open the user menu popover
   async openUserMenu(ev: any) {
     const popover = await this.popoverCtrl.create({
       component: UserMenuPopoverComponent,
@@ -132,7 +194,7 @@ export class MoodTrackerPage implements OnInit {
       cssClass: 'custom-popover',
       backdropDismiss: true,
       componentProps: {
-        userInitials: this.userInitials // Pass initials to popover
+        userInitials: this.userInitials
       }
     });
 
@@ -141,41 +203,11 @@ export class MoodTrackerPage implements OnInit {
     const { data } = await popover.onDidDismiss();
 
     if (data?.action === 'choose-picture') {
-      // Choose a picture
       this.router.navigate(['/choose-picture']);
-    } else if (data?.action === 'update-details') {
-      // Navigate to the edit page
     } else if (data?.action === 'logout') {
-      // Logout 
       localStorage.clear();
       this.router.navigate(['/login']);
     }
-  }
-
-  getHighlightedDates() {
-    // Create highlighted dates for the calendar
-    const highlights = [];
-
-    for (const [dateStr, moodIndex] of Object.entries(this.moodDates)) {
-      // Get the mood colour based on index
-      let color;
-      switch (moodIndex) {
-        case 0: color = 'red'; break;      // Angry
-        case 1: color = 'orange'; break;   // Sad
-        case 2: color = 'yellow'; break;   // Neutral
-        case 3: color = 'lightgreen'; break; // Happy
-        case 4: color = 'green'; break;    // Excited
-        default: color = 'blue';
-      }
-
-      highlights.push({
-        date: dateStr,
-        textColor: '#ffffff',
-        backgroundColor: color
-      });
-    }
-
-    return highlights;
   }
 
   getMoodHistoryEntries() {
@@ -188,7 +220,6 @@ export class MoodTrackerPage implements OnInit {
       });
     }
 
-    // Sort by date (most recent first)
     return entries.sort((a, b) => b.date.getTime() - a.date.getTime());
   }
 }

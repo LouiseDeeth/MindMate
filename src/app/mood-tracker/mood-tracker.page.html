@@ -13,7 +13,12 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content class="gray-background" fullscreen>
+<ion-content class="gray-background">
+  <!-- Loading indicator -->
+  <div class="loading-indicator" *ngIf="isLoading">
+    <ion-spinner name="circular"></ion-spinner>
+    <p>Loading...</p>
+  </div>
 
   <div class="app-branding">
     <img src="assets/images/Logo.png" alt="MindMate Logo" class="app-logo" />
@@ -24,7 +29,7 @@
     <div class="question">How do you feel today?</div>
     <div class="subtext">I am feeling:</div>
   </div>
-   
+    
   <div class="mood-emojis">
     <ion-button fill="clear" *ngFor="let mood of moods; let i = index" (click)="selectMood(i)">
       <img [src]="mood.icon" [alt]="mood.label" [class.selected]="selectedMood === i" />
@@ -33,34 +38,14 @@
 
   <div class="mood-bar"></div>
 
+  <!-- Calendar Component -->
   <div class="mood-calendar">
-    <ion-datetime
-      presentation="date"
-      [(ngModel)]="selectedDate"
-      (ionChange)="onDateChange()"
-      [highlightedDates]="getHighlightedDates()"
+    <ion-datetime 
+      presentation="date" 
+      [value]="selectedDate" 
+      (ionChange)="onDateChange($event)"
+      [highlightedDates]="highlightedDates"
       class="calendar-picker">
     </ion-datetime>
-  </div>
-  
-  <!-- Mood History Section -->
-  <div class="mood-history">
-    <h3>Your Mood History</h3>
-    
-    <div class="empty-state" *ngIf="objectKeys(moodDates).length === 0">
-      <p>You haven't recorded any moods yet.</p>
-    </div>
-    
-    <ion-list *ngIf="objectKeys(moodDates).length > 0">
-      <ion-item *ngFor="let entry of getMoodHistoryEntries()">
-        <ion-label>
-          <h2>{{ entry.date | date:'longDate' }}</h2>
-          <p>Mood: {{ moods[entry.moodIndex].label }}</p>
-        </ion-label>
-        <ion-thumbnail slot="end">
-          <img [src]="moods[entry.moodIndex].icon" [alt]="moods[entry.moodIndex].label">
-        </ion-thumbnail>
-      </ion-item>
-    </ion-list>
   </div>
 </ion-content>

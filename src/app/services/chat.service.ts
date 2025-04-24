@@ -11,18 +11,18 @@ import { User } from '@angular/fire/auth';
   providedIn: 'root'
 })
 export class ChatService implements OnDestroy {
-
+  
   private apiKey = environment.claudeApiKey;
-  private apiUrl = environment.backendUrl;
+  private apiUrl = environment.backendUrl; 
   private claudeModel = 'claude-3-opus-20240229';
   private chatHistory: { role: string, content: string }[] = [];
   private lastRequestTime = 0;
   private minRequestInterval = 1000; // Minimum time between requests in ms
   private currentUser: User | null = null;
   private authSubscription: Subscription;
-
+  
   constructor(
-    private http: HttpClient,
+    private http: HttpClient, 
     private firestore: Firestore,
     private authService: AuthService
   ) {
@@ -47,8 +47,8 @@ export class ChatService implements OnDestroy {
 
   private initializeDefaultChatHistory(): void {
     this.chatHistory = [
-      {
-        role: 'system',
+      { 
+        role: 'system', 
         content: this.getSystemMessage()
       }
     ];
@@ -61,13 +61,13 @@ export class ChatService implements OnDestroy {
     }
 
     const chatDocRef = doc(this.firestore, `users/${this.currentUser.uid}/data/chatHistory`);
-
+    
     return getDoc(chatDocRef).then(docSnap => {
       if (docSnap.exists()) {
         const data = docSnap.data();
         if (data && data['messages'] && Array.isArray(data['messages'])) {
           this.chatHistory = data['messages'];
-
+          
           // Make sure we have the system message
           if (!this.chatHistory.some(msg => msg.role === 'system')) {
             // Add system message if it doesn't exist
@@ -120,7 +120,7 @@ Remember that your purpose is to provide immediate emotional support and practic
     }
 
     const chatDocRef = doc(this.firestore, `users/${this.currentUser.uid}/data/chatHistory`);
-
+    
     return setDoc(chatDocRef, {
       messages: this.chatHistory,
       updatedAt: new Date()
@@ -134,37 +134,37 @@ Remember that your purpose is to provide immediate emotional support and practic
     if (!this.apiKey) {
       return throwError(() => new Error('Claude API key is not configured'));
     }
-
+  
     // Check if user is authenticated
     if (!this.currentUser) {
       return throwError(() => new Error('User not authenticated'));
     }
-
+  
     // Add rate limiting with proper delay implementation
     const now = Date.now();
     const timeSinceLastRequest = now - this.lastRequestTime;
-
+    
     // If we need to delay, return an observable that waits before making the request
     if (timeSinceLastRequest < this.minRequestInterval) {
       const delayTime = this.minRequestInterval - timeSinceLastRequest;
       console.log(`Enforcing rate limit: Delaying request by ${delayTime}ms`);
-
+      
       return timer(delayTime).pipe(
         switchMap(() => this.executeClaudeRequest(message))
       );
     }
-
+    
     // Otherwise, proceed immediately
     return this.executeClaudeRequest(message);
   }
-
+  
   // Separated the actual request execution for better rate limit control
   private executeClaudeRequest(message: string): Observable<any> {
     this.lastRequestTime = Date.now(); // Update timestamp before the request
-
+    
     // Add user message to chat history
     this.chatHistory.push({ role: 'user', content: message });
-
+  
     // Keep only the last 10 messages to manage token usage
     if (this.chatHistory.length > 11) { // Keep system message + last 10 exchanges
       this.chatHistory = [
@@ -172,7 +172,7 @@ Remember that your purpose is to provide immediate emotional support and practic
         ...this.chatHistory.slice(-10) // Keep last 10 messages
       ];
     }
-
+    
     // Extract system message and prepare Claude-compatible message format
     let systemMessage = '';
     const claudeMessages = this.chatHistory.filter(msg => {
@@ -182,12 +182,12 @@ Remember that your purpose is to provide immediate emotional support and practic
       }
       return true;
     });
-
+  
     // We're now sending to our backend proxy, not directly to Claude
     const headers = new HttpHeaders({
       'Content-Type': 'application/json'
     });
-
+  
     // Send all Claude API details to our backend proxy
     const body = {
       apiKey: this.apiKey, // Backend will use this to authenticate with Claude
@@ -197,10 +197,10 @@ Remember that your purpose is to provide immediate emotional support and practic
       max_tokens: 350,
       temperature: 0.7
     };
-
+  
     // Add improved retry logic with exponential backoff for rate limit errors
     return this.http.post(this.apiUrl, body, { headers }).pipe(
-      retryWhen(errors =>
+      retryWhen(errors => 
         errors.pipe(
           tap(error => {
             if (error.status === 429) {
@@ -225,10 +225,10 @@ Remember that your purpose is to provide immediate emotional support and practic
             role: 'assistant',
             content: res.content
           };
-
+          
           this.chatHistory.push(assistantMessage);
           this.saveChatHistoryToFirestore();
-
+          
           // Reset minRequestInterval after successful request (gradually)
           if (this.minRequestInterval > 1000) {
             this.minRequestInterval = Math.max(1000, this.minRequestInterval - 1000);
@@ -256,12 +256,12 @@ Remember that your purpose is to provide immediate emotional support and practic
       }),
       catchError(error => {
         console.error('Error with API:', error);
-
+        
         if (error.status === 429) {
           // Special handling for rate limit errors
           return throwError(() => new Error('rate_limit_exceeded'));
         }
-
+        
         // Don't modify chat history here, let the component handle it
         return throwError(() => error);
       })
@@ -284,20 +284,20 @@ Remember that your purpose is to provide immediate emotional support and practic
     if (!this.currentUser) {
       return throwError(() => new Error('User not authenticated'));
     }
-
+    
     // Keep only the system message
     const systemMessage = this.chatHistory.find(msg => msg.role === 'system');
     this.chatHistory = systemMessage ? [systemMessage] : [{
       role: 'system',
       content: this.getSystemMessage()
     }];
-
+    
     return from(this.saveChatHistoryToFirestore());
   }
-
+  
   // Useful for emergency situations
   getResourcesByCountry(country: string = 'US'): string[] {
-    const resources: { [key: string]: string[] } = {
+    const resources: {[key: string]: string[]} = {
       'IE': [
         'Samaritans Ireland: 116 123 (free, 24/7)',
         'Pieta House (suicide/self-harm): 1800 247 247',
@@ -327,7 +327,7 @@ Remember that your purpose is to provide immediate emotional support and practic
         'Hope for Wellness Helpline: 1-855-242-3310'
       ]
     };
-
-    return resources[country] || resources['IE'];
+    
+    return resources[country] || resources['IE']; 
   }
 }
