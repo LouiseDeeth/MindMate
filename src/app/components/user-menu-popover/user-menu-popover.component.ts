@@ -12,7 +12,7 @@ import { IonicModule, PopoverController } from '@ionic/angular';
 export class UserMenuPopoverComponent  implements OnInit {
 
   constructor(private popoverCtrl: PopoverController) {}
-  @Input() userInitials: string = 'GH'; // Default
+  @Input() userInitials: string = 'NA'; // Default
 
   choosePicture() {
     this.popoverCtrl.dismiss({ action: 'choose-picture' });
