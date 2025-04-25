@@ -1,69 +1,68 @@
-const functions = require("firebase-functions");
+const { onRequest } = require("firebase-functions/v2/https");
 const cors = require("cors")({ origin: true });
 const axios = require("axios");
+const { defineString } = require("firebase-functions/params");
 
-// Cloud function to proxy requests to Claude API
-exports.claudeProxy = functions.https.onRequest((request, response) => {
-    return cors(request, response, async () => {
-        try {
-            // Only allow POST requests
-            if (request.method !== "POST") {
-                return response.status(405).send("Method Not Allowed");
-            }
+// Define your config parameter with a default (which won't be used)
+const claudeApiKey = defineString("CLAUDE_API_KEY");
 
-            // Extract Claude API details from the request
-            const {
-                apiKey,
-                model = "claude-3-opus-20240229",
-                messages,
-                system,
-                temperature = 0.7,
-            } = request.body;
-            const maxTokens = 350;
-            if (!apiKey) {
-                return response.status(400).json({ error: "API key is required" });
-            }
+// Export the function using v2 syntax
+exports.claudeProxy = onRequest(async (req, res) => {
+  return cors(req, res, async () => {
+    try {
+      if (req.method !== "POST") {
+        return res.status(405).send("Method Not Allowed");
+      }
 
-            // Make the request to Claude API
-            const claudeResponse = await axios.post(
-                "https://api.anthropic.com/v1/messages",
-                {
-                    model: model || "claude-3-opus-20240229",
-                    messages: messages,
-                    system: system,
-                    max_tokens: maxTokens,
-                    temperature: temperature || 0.7,
-                },
-                {
-                    headers: {
-                        "Content-Type": "application/json",
-                        "x-api-key": apiKey,
-                        "anthropic-version": "2023-06-01",
-                    },
-                },
-            );
+      // Try using process.env for Firebase config
+      const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY;
 
-            // Transform the response to the format expected by your frontend
-            const responseData = {
-                content: claudeResponse.data.content[0].text,
-                role: "assistant",
-            };
+      if (!CLAUDE_API_KEY) {
+        console.error("Missing Claude API key in configuration");
+        return res.status(500).json({ error: "Server configuration error" });
+      }
 
-            return response.json(responseData);
-        } catch (error) {
-            console.error("Error proxying to Claude API:", error.message);
+      const {
+        model = "claude-3-opus-20240229",
+        messages,
+        system,
+        temperature = 0.7
+      } = req.body;
 
-            // Return appropriate status codes based on Claude API responses
-            if (error.response) {
-                const errorMessage = error.response.data && error.response.data.error ?
-                    error.response.data.error.message : "Error from Claude API";
+      if (!messages || !Array.isArray(messages)) {
+        return res.status(400).json({ error: "Invalid or missing 'messages' array" });
+      }
 
-                return response
-                    .status(error.response.status).json({ error: errorMessage });
-            }
-
-            return response.status(500)
-                .json({ error: "Failed to communicate with Claude API" });
+      console.log("Making request to Claude API");
+      
+      const response = await axios.post(
+        "https://api.anthropic.com/v1/messages",
+        {
+          model,
+          messages,
+          system,
+          max_tokens: 350,
+          temperature
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "x-api-key": CLAUDE_API_KEY,
+            "anthropic-version": "2023-06-01"
+          }
         }
-    });
+      );
+
+      console.log("Received response from Claude API");
+      
+      const content = response.data?.content?.[0]?.text || "";
+      return res.json({ role: "assistant", content });
+
+    } catch (err) {
+      console.error("Claude Proxy Error:", err.response?.data || err.message);
+      return res.status(err.response?.status || 500).json({
+        error: err.response?.data || "Internal Server Error"
+      });
+    }
+  });
 });

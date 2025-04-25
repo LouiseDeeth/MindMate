@@ -12,7 +12,6 @@ import { User } from '@angular/fire/auth';
 })
 export class ChatService implements OnDestroy {
   
-  private apiKey = environment.claudeApiKey;
   private apiUrl = environment.backendUrl; 
   private claudeModel = 'claude-3-opus-20240229';
   private chatHistory: { role: string, content: string }[] = [];
@@ -131,9 +130,6 @@ Remember that your purpose is to provide immediate emotional support and practic
   }
 
   sendMessage(message: string): Observable<any> {
-    if (!this.apiKey) {
-      return throwError(() => new Error('Claude API key is not configured'));
-    }
   
     // Check if user is authenticated
     if (!this.currentUser) {
@@ -190,7 +186,6 @@ Remember that your purpose is to provide immediate emotional support and practic
   
     // Send all Claude API details to our backend proxy
     const body = {
-      apiKey: this.apiKey, // Backend will use this to authenticate with Claude
       model: this.claudeModel,
       messages: claudeMessages,
       system: systemMessage,

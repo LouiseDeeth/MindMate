@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Auth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged,signInAnonymously, User, GoogleAuthProvider, signInWithPopup } from '@angular/fire/auth';
 import { BehaviorSubject } from 'rxjs';
+import { Firestore, doc, setDoc } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -8,11 +9,19 @@ import { BehaviorSubject } from 'rxjs';
 export class AuthService {
   private currentUserSubject = new BehaviorSubject<User | null>(null);
 
-  constructor(private auth: Auth) {
+  constructor(private auth: Auth, private firestore: Firestore)  {
     // Listen to auth state changes
-    onAuthStateChanged(this.auth, user => {
+    onAuthStateChanged(this.auth, async user => {
       this.currentUserSubject.next(user);
-    });
+    
+      if (user) {
+        const userRef = doc(this.firestore, 'users', user.uid);
+        await setDoc(userRef, {
+          email: user.email || '',
+          createdAt: new Date(),
+        }, { merge: true });
+      }
+    });    
   }
 
   getCurrentUser() {

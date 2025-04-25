@@ -1,8 +1,6 @@
 export const environment = {
   production: true,
-  claudeApiKey: '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',
-  //openAiOrgId: 'org-lhY2VC5U2ksVpJEak5RuOWGx'
-  backendUrl: 'https://us-central1-mindmate-cc00b.cloudfunctions.net/claudeProxy',
+  backendUrl: 'https://claudeproxy-3p3tk5tdca-uc.a.run.app',
   firebase: {
     apiKey: 'AIzaSyBj537_opXLI5cLFDDrS7bBDSZOc_c-6kk',
     authDomain: 'mindmate-cc00b.firebaseapp.com',
