@@ -1,6 +1,6 @@
 # MindMate App
 
-## MindMate is a mental health support app built using Ionic + Angular, Firebase, and Claude AI integration for real-time chat support.
+### MindMate is a supportive mental health companion app designed to help users track their moods, chat with an AI assistant, and encourage self-care practices. Built with Ionic + Angular and powered by Firebase and Claude AI, MindMate provides an easy-to-use and accessible platform for emotional wellbeing.
 
 ---
 
