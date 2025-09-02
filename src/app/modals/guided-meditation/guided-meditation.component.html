@@ -1,0 +1,62 @@
+<ion-header class="breathing-header">
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-button (click)="goHome()">
+          <ion-back-button defaultHref="/meditation"></ion-back-button>
+        </ion-button>
+      </ion-buttons>
+      <ion-buttons slot="end">
+      </ion-buttons>
+    </ion-toolbar>
+  </ion-header>
+  
+  <ion-content class="gray-background" fullscreen>
+  
+    <div class="breathing-container">
+      <div class="breathing-circle" [ngStyle]="{'width.px': circleSize, 'height.px': circleSize}">
+        <div class="inner-circle"></div>
+      </div>
+      
+      <h2 class="instruction">{{ instruction }}</h2>
+      <p class="timer" *ngIf="isActive">{{ timer }}</p>
+      
+      <div class="progress-bar" *ngIf="isActive">
+        <div class="progress" [style.width]="progress"></div>
+      </div>
+      
+      <div class="controls">
+        <ion-button *ngIf="!isActive" (click)="startBreathing()" expand="block">
+          Start
+        </ion-button>
+        <ion-button *ngIf="isActive" (click)="stopBreathing()" expand="block">
+          Stop
+        </ion-button>
+      </div>
+      
+      <div class="pattern-selector">
+        <h3>Breathing Pattern</h3>
+        <ion-segment [disabled]="isActive" [(ngModel)]="selectedPattern" (ionChange)="selectPattern($event.detail.value)">
+          <ion-segment-button *ngFor="let pattern of breathingPatterns" [value]="pattern">
+            <ion-label>{{ pattern.name }}</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+      </div>
+      
+      <div class="instructions">
+        <h3>How to do this exercise:</h3>
+        <ol>
+          <li>Find a comfortable sitting position</li>
+          <li>Follow the circle as it expands and contracts</li>
+          <li>Breathe in as the circle expands</li>
+          <li>Hold your breath when prompted</li>
+          <li>Breathe out as the circle contracts</li>
+          <li>Try to focus only on your breathing</li>
+        </ol>
+        
+        <p class="benefits">
+          Regular breathing exercises can help reduce anxiety, lower stress levels, 
+          improve focus, and promote better sleep.
+        </p>
+      </div>
+    </div>
+  </ion-content>
