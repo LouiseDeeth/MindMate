@@ -37,9 +37,13 @@ export class BreathingModalComponent implements OnInit, OnDestroy {
     this.stopBreathing();
   }
 
-  async goHome() {
-    await this.modalCtrl.dismiss();
-    this.router.navigate(['/home']);
+  dismiss() {
+    this.stopBreathing();
+    this.modalCtrl.dismiss().then(() => {
+      console.log('Breathing modal dismissed successfully');
+    }).catch(error => {
+      console.error('Error dismissing breathing modal:', error);
+    });
   }
 
   startBreathing() {
