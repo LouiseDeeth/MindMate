@@ -118,6 +118,18 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     this.isPaused = false;
   }
 
+  // Speak the current instruction
+  speakInstruction(text: string) {
+    if ('speechSynthesis' in window) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.8; // Slower, calming pace
+      utterance.pitch = 0.9; // Slightly lower pitch
+      utterance.volume = 0.7; // Gentle volume
+      speechSynthesis.speak(utterance);
+    }
+  }
+
+  // Start the meditation session
   startMeditation() {
     if (this.isActive && !this.isPaused) return;
 
@@ -128,6 +140,7 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
       this.currentStep = 0;
       this.timer = this.selectedProgram.steps[0].duration;
       this.currentInstruction = this.selectedProgram.steps[0].instruction;
+      this.speakInstruction(this.currentInstruction);
     }
 
     this.intervalId = setInterval(() => {
@@ -143,6 +156,10 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     if (this.intervalId) {
       clearInterval(this.intervalId);
       this.isPaused = true;
+      // Stop any current speech
+      if ('speechSynthesis' in window) {
+        speechSynthesis.cancel();
+      }
     }
   }
 
@@ -150,8 +167,14 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     if (this.intervalId) {
       clearInterval(this.intervalId);
     }
+    // Stop any current speech
+    if ('speechSynthesis' in window) {
+      speechSynthesis.cancel();
+    }
     this.resetSession();
+    this.showSessionView = false;
   }
+
 
   nextStep() {
     this.currentStep++;
@@ -164,11 +187,16 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     const step = this.selectedProgram.steps[this.currentStep];
     this.timer = step.duration;
     this.currentInstruction = step.instruction;
+
+    if (step.type !== 'silence') {
+      this.speakInstruction(this.currentInstruction);
+    }
   }
 
   completeMeditation() {
     this.stopMeditation();
     this.currentInstruction = 'Meditation complete. Take a moment to notice how you feel.';
+    this.speakInstruction(this.currentInstruction);
   }
 
   get progress() {
@@ -209,3 +237,4 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     }
   }
 }
+
