@@ -138,3 +138,11 @@ ion-back-button {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+ion-toolbar ion-button {
+  --color: #1B4965;
+}
+
+ion-toolbar ion-button ion-icon {
+  color: #1B4965 !important;
+}
+
