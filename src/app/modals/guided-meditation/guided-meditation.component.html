@@ -11,7 +11,7 @@
 
 <ion-content class="ion-padding">
   <!-- Program Selection (only shown when not active) -->
-  <div *ngIf="!isActive && !isPaused" class="program-selection">
+  <div *ngIf="!showSessionView" class="program-selection">
     <h2>Choose Your Meditation</h2>
     <div class="programs-grid">
       <div 
@@ -27,7 +27,7 @@
   </div>
 
   <!-- Meditation Session View -->
-  <div *ngIf="isActive || isPaused" class="meditation-session">
+  <div *ngIf="showSessionView || isPaused" class="meditation-session">
     <div class="session-header">
       <h2>{{ selectedProgram.name }}</h2>
       <div class="time-info">
@@ -63,7 +63,6 @@
       <ion-button 
         *ngIf="!isActive || isPaused" 
         (click)="startMeditation()" 
-        color="primary" 
         size="large"
         expand="block">
         <ion-icon name="play" slot="start"></ion-icon>
@@ -84,8 +83,8 @@
   </div>
 
   <!-- Instructions (only shown when not active) -->
-  <div *ngIf="!isActive && !isPaused" class="instructions">
-    <h3>How to Meditate</h3>
+<div *ngIf="!showSessionView" class="instructions">
+        <h3>How to Meditate</h3>
     <ol>
       <li>Find a quiet, comfortable space where you won't be disturbed</li>
       <li>Sit or lie down in a comfortable position</li>

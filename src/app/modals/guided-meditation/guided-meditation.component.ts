@@ -24,7 +24,8 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
   isPaused: boolean = false;
   intervalId: any;
   currentInstruction: string = 'Get ready to begin your meditation';
-  
+  showSessionView: boolean = false;
+
   meditationPrograms = [
     {
       name: 'Anxiety Relief',
@@ -83,10 +84,10 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
       ]
     }
   ];
-  
+
   selectedProgram = this.meditationPrograms[0];
-  
-  constructor(private modalController: ModalController) {}
+
+  constructor(private modalController: ModalController) { }
 
   ngOnInit() {
     this.resetSession();
@@ -100,13 +101,14 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     this.stopMeditation();
     this.modalController.dismiss();
   }
-  
+
   selectProgram(program: any) {
     if (this.isActive) return;
     this.selectedProgram = program;
     this.resetSession();
+    this.showSessionView = true;
   }
-  
+
   resetSession() {
     this.currentStep = 0;
     this.timer = this.selectedProgram.steps[0]?.duration || 0;
@@ -118,7 +120,7 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
 
   startMeditation() {
     if (this.isActive && !this.isPaused) return;
-    
+
     if (this.isPaused) {
       this.isPaused = false;
     } else {
@@ -127,10 +129,10 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
       this.timer = this.selectedProgram.steps[0].duration;
       this.currentInstruction = this.selectedProgram.steps[0].instruction;
     }
-    
+
     this.intervalId = setInterval(() => {
       this.timer--;
-      
+
       if (this.timer <= 0) {
         this.nextStep();
       }
@@ -153,12 +155,12 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
 
   nextStep() {
     this.currentStep++;
-    
+
     if (this.currentStep >= this.selectedProgram.steps.length) {
       this.completeMeditation();
       return;
     }
-    
+
     const step = this.selectedProgram.steps[this.currentStep];
     this.timer = step.duration;
     this.currentInstruction = step.instruction;
@@ -168,18 +170,19 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     this.stopMeditation();
     this.currentInstruction = 'Meditation complete. Take a moment to notice how you feel.';
   }
-  
+
   get progress() {
     const totalSteps = this.selectedProgram.steps.length;
-    return ((this.currentStep / totalSteps) * 100) + '%';
+    const percentage = Math.round((this.currentStep / totalSteps) * 100);
+    return percentage + '%';
   }
-  
+
   get timeRemaining() {
     const minutes = Math.floor(this.timer / 60);
     const seconds = this.timer % 60;
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
-  
+
   get totalTimeRemaining() {
     let remaining = 0;
     for (let i = this.currentStep; i < this.selectedProgram.steps.length; i++) {
@@ -193,11 +196,11 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     const seconds = remaining % 60;
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   }
-  
+
   get stepTypeIcon() {
     const currentStepData = this.selectedProgram.steps[this.currentStep];
     if (!currentStepData) return 'leaf-outline';
-    
+
     switch (currentStepData.type) {
       case 'breathing': return 'fitness-outline';
       case 'visualization': return 'eye-outline';
