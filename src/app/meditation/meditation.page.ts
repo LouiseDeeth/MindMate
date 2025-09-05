@@ -8,6 +8,7 @@ import { PopoverController } from '@ionic/angular';
 import { Router } from '@angular/router';
 import { UserMenuPopoverComponent } from '../components/user-menu-popover/user-menu-popover.component';
 import { BreathingModalComponent } from '../modals/breathing-modal/breathing-modal.component';
+import { GuidedMeditationComponent } from '../modals/guided-meditation/guided-meditation.component';
 
 @Component({
   selector: 'app-meditation',
@@ -19,7 +20,8 @@ import { BreathingModalComponent } from '../modals/breathing-modal/breathing-mod
     CommonModule,
     FormsModule,
     RouterModule,
-    BreathingModalComponent
+    BreathingModalComponent,
+    GuidedMeditationComponent
   ],
 })
 export class MeditationPage implements OnInit {
@@ -90,10 +92,15 @@ export class MeditationPage implements OnInit {
 
     return await modal.present();
   }
-
-  // For the guided meditation button (placeholder for now)
-  startGuidedMeditation() {
-    console.log('Starting guided meditation...');
+  
+  // Open the guided meditation modal
+  async startGuidedMeditation() {
+    const modal = await this.modalController.create({
+      component: GuidedMeditationComponent,
+      cssClass: 'guided-meditation-modal'
+    });
+    
+    return await modal.present();
   }
 
   // For the relaxing music button (placeholder for now)
