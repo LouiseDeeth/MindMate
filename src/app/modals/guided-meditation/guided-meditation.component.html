@@ -1,62 +1,107 @@
-<ion-header class="breathing-header">
-    <ion-toolbar>
-      <ion-buttons slot="start">
-        <ion-button (click)="goHome()">
-          <ion-back-button defaultHref="/meditation"></ion-back-button>
-        </ion-button>
-      </ion-buttons>
-      <ion-buttons slot="end">
-      </ion-buttons>
-    </ion-toolbar>
-  </ion-header>
-  
-  <ion-content class="gray-background" fullscreen>
-  
-    <div class="breathing-container">
-      <div class="breathing-circle" [ngStyle]="{'width.px': circleSize, 'height.px': circleSize}">
-        <div class="inner-circle"></div>
+<ion-header class="meditation-header">
+  <ion-toolbar>
+    <ion-title>Guided Meditation</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Program Selection (only shown when not active) -->
+  <div *ngIf="!isActive && !isPaused" class="program-selection">
+    <h2>Choose Your Meditation</h2>
+    <div class="programs-grid">
+      <div 
+        *ngFor="let program of meditationPrograms"
+        class="program-card"
+        [class.selected]="selectedProgram === program"
+        (click)="selectProgram(program)">
+        <h3>{{ program.name }}</h3>
+        <p class="duration">{{ program.duration / 60 }} minutes</p>
+        <p class="description">{{ program.description }}</p>
       </div>
-      
-      <h2 class="instruction">{{ instruction }}</h2>
-      <p class="timer" *ngIf="isActive">{{ timer }}</p>
-      
-      <div class="progress-bar" *ngIf="isActive">
-        <div class="progress" [style.width]="progress"></div>
+    </div>
+  </div>
+
+  <!-- Meditation Session View -->
+  <div *ngIf="isActive || isPaused" class="meditation-session">
+    <div class="session-header">
+      <h2>{{ selectedProgram.name }}</h2>
+      <div class="time-info">
+        <span class="current-time">{{ timeRemaining }}</span>
+        <span class="total-time">/ {{ totalTimeRemaining }} remaining</span>
       </div>
+    </div>
+
+    <!-- Visual indicator based on meditation type -->
+    <div class="meditation-visual">
+      <div class="icon-container">
+        <ion-icon [name]="stepTypeIcon" class="meditation-icon"></ion-icon>
+      </div>
+      <div class="pulse-ring" [class.active]="isActive && !isPaused"></div>
+    </div>
+
+    <!-- Current instruction -->
+    <div class="instruction-container">
+      <h3 class="instruction">{{ currentInstruction }}</h3>
+      <p class="step-info">Step {{ currentStep + 1 }} of {{ selectedProgram.steps.length }}</p>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="progress-container">
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width]="progress"></div>
+      </div>
+      <span class="progress-text">{{ progress }}</span>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+      <ion-button 
+        *ngIf="!isActive || isPaused" 
+        (click)="startMeditation()" 
+        color="primary" 
+        size="large"
+        expand="block">
+        <ion-icon name="play" slot="start"></ion-icon>
+        {{ isPaused ? 'Resume' : 'Start' }}
+      </ion-button>
       
-      <div class="controls">
-        <ion-button *ngIf="!isActive" (click)="startBreathing()" expand="block">
-          Start
+      <div *ngIf="isActive && !isPaused" class="active-controls">
+        <ion-button (click)="pauseMeditation()" color="medium" size="large">
+          <ion-icon name="pause" slot="start"></ion-icon>
+          Pause
         </ion-button>
-        <ion-button *ngIf="isActive" (click)="stopBreathing()" expand="block">
+        <ion-button (click)="stopMeditation()" color="danger" fill="outline" size="large">
+          <ion-icon name="stop" slot="start"></ion-icon>
           Stop
         </ion-button>
       </div>
-      
-      <div class="pattern-selector">
-        <h3>Breathing Pattern</h3>
-        <ion-segment [disabled]="isActive" [(ngModel)]="selectedPattern" (ionChange)="selectPattern($event.detail.value)">
-          <ion-segment-button *ngFor="let pattern of breathingPatterns" [value]="pattern">
-            <ion-label>{{ pattern.name }}</ion-label>
-          </ion-segment-button>
-        </ion-segment>
-      </div>
-      
-      <div class="instructions">
-        <h3>How to do this exercise:</h3>
-        <ol>
-          <li>Find a comfortable sitting position</li>
-          <li>Follow the circle as it expands and contracts</li>
-          <li>Breathe in as the circle expands</li>
-          <li>Hold your breath when prompted</li>
-          <li>Breathe out as the circle contracts</li>
-          <li>Try to focus only on your breathing</li>
-        </ol>
-        
-        <p class="benefits">
-          Regular breathing exercises can help reduce anxiety, lower stress levels, 
-          improve focus, and promote better sleep.
-        </p>
-      </div>
     </div>
-  </ion-content>
+  </div>
+
+  <!-- Instructions (only shown when not active) -->
+  <div *ngIf="!isActive && !isPaused" class="instructions">
+    <h3>How to Meditate</h3>
+    <ol>
+      <li>Find a quiet, comfortable space where you won't be disturbed</li>
+      <li>Sit or lie down in a comfortable position</li>
+      <li>Choose a meditation program that suits your current needs</li>
+      <li>Follow the guided instructions at your own pace</li>
+      <li>If your mind wanders, gently return your attention to the guidance</li>
+      <li>Don't judge yourself - meditation is a practice, not a performance</li>
+    </ol>
+    
+    <div class="benefits-section">
+      <h4>Benefits of Regular Meditation</h4>
+      <p>
+        Regular meditation practice can help reduce stress, improve focus, 
+        enhance emotional well-being, and promote better sleep. Even just 
+        a few minutes daily can make a positive difference.
+      </p>
+    </div>
+  </div>
+</ion-content>
