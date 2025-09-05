@@ -1,3 +1,4 @@
+// src/app/modals/guided-meditation/guided-meditation.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ModalController, IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
@@ -25,6 +26,7 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
   intervalId: any;
   currentInstruction: string = 'Get ready to begin your meditation';
   showSessionView: boolean = false;
+  private availableVoices: SpeechSynthesisVoice[] = [];
 
   meditationPrograms = [
     {
@@ -91,10 +93,25 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.resetSession();
+    this.loadVoices();
   }
 
   ngOnDestroy() {
     this.stopMeditation();
+  }
+
+  // Load and cache available voices
+  private loadVoices() {
+    if ('speechSynthesis' in window) {
+      // Load voices immediately if available
+      this.availableVoices = speechSynthesis.getVoices();
+      
+      // Also listen for the voiceschanged event (for browsers that load voices asynchronously)
+      speechSynthesis.onvoiceschanged = () => {
+        this.availableVoices = speechSynthesis.getVoices();
+        console.log('Available voices:', this.availableVoices.map(v => v.name));
+      };
+    }
   }
 
   dismiss() {
@@ -118,13 +135,73 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     this.isPaused = false;
   }
 
-  // Speak the current instruction
+  // Enhanced voice selection with better matching
+  private selectBestVoice(): SpeechSynthesisVoice | null {
+    if (this.availableVoices.length === 0) {
+      this.availableVoices = speechSynthesis.getVoices();
+    }
+
+    // First, try to find any female voice (usually more calming)
+    let femaleVoice = this.availableVoices.find(voice => 
+      voice.name.toLowerCase().includes('female') ||
+      voice.name.toLowerCase().includes('woman') ||
+      voice.name.toLowerCase().includes('zira') ||
+      voice.name.toLowerCase().includes('samantha') ||
+      voice.name.toLowerCase().includes('anna')
+    );
+
+    if (femaleVoice) {
+      console.log('Selected female voice:', femaleVoice.name);
+      return femaleVoice;
+    }
+
+    // Next, try to find any natural-sounding voice
+    let naturalVoice = this.availableVoices.find(voice => 
+      voice.name.toLowerCase().includes('natural') ||
+      voice.name.toLowerCase().includes('premium') ||
+      voice.name.toLowerCase().includes('enhanced')
+    );
+
+    if (naturalVoice) {
+      console.log('Selected natural voice:', naturalVoice.name);
+      return naturalVoice;
+    }
+
+    // Finally, prefer English voices over others
+    let englishVoice = this.availableVoices.find(voice => 
+      voice.lang.startsWith('en-') && !voice.name.toLowerCase().includes('male')
+    );
+
+    if (englishVoice) {
+      console.log('Selected English voice:', englishVoice.name);
+      return englishVoice;
+    }
+
+    // Last resort - use first available voice
+    if (this.availableVoices.length > 0) {
+      console.log('Using default voice:', this.availableVoices[0].name);
+      return this.availableVoices[0];
+    }
+
+    return null;
+  }
+
+  // Speak the current instruction with improved voice selection
   speakInstruction(text: string) {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
-      utterance.rate = 0.8; // Slower, calming pace
-      utterance.pitch = 0.9; // Slightly lower pitch
-      utterance.volume = 0.7; // Gentle volume
+      
+      // Use our improved voice selection
+      const selectedVoice = this.selectBestVoice();
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
+      
+      // Calming speech parameters
+      utterance.rate = 0.6;    // Even slower for meditation
+      utterance.pitch = 0.7;   // Lower pitch for calmness
+      utterance.volume = 0.8;  // Clear but gentle volume
+      
       speechSynthesis.speak(utterance);
     }
   }
@@ -174,7 +251,6 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     this.resetSession();
     this.showSessionView = false;
   }
-
 
   nextStep() {
     this.currentStep++;
@@ -237,4 +313,3 @@ export class GuidedMeditationComponent implements OnInit, OnDestroy {
     }
   }
 }
-
