@@ -1,0 +1,331 @@
+/* src/app/modals/relaxing-music/relaxing-music.component.scss */
+
+ion-toolbar {
+  --background: #D9D9D9;
+  --color: #1B4965;
+}
+
+ion-toolbar ion-button {
+  --color: #1B4965;
+}
+
+ion-toolbar ion-button ion-icon {
+  color: #1B4965 !important;
+}
+
+ion-content {
+  --background: #D9D9D9;
+}
+
+/* Track Selection Styles */
+.track-selection {
+  padding: 0 10px;
+}
+
+.track-selection h2 {
+  color: #1B4965;
+  text-align: center;
+  margin-bottom: 10px;
+  font-size: 1.5rem;
+}
+
+.track-selection .description {
+  color: #84A98C;
+  text-align: center;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+}
+
+.tracks-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 15px;
+  margin-bottom: 20px;
+}
+
+.track-card {
+  background: #EDEDE9;
+  border-radius: 12px;
+  padding: 15px;
+  text-align: center;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+  border: 2px solid transparent;
+}
+
+.track-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #84A98C;
+}
+
+.track-icon {
+  width: 50px;
+  height: 50px;
+  margin: 0 auto 10px;
+  background: rgba(132, 169, 140, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.track-icon ion-icon {
+  font-size: 1.8rem;
+  color: #84A98C;
+}
+
+.track-card h3 {
+  color: #1B4965;
+  margin: 0 0 5px 0;
+  font-size: 1rem;
+}
+
+.track-duration {
+  color: #84A98C;
+  font-weight: 600;
+  margin: 0 0 5px 0;
+  font-size: 0.8rem;
+}
+
+.track-description {
+  color: #1B4965;
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.3;
+}
+
+/* Music Player Styles */
+.music-player {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 10px;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.music-visual {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin-bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.music-icon-container {
+  width: 150px;
+  height: 150px;
+  background: rgba(132, 169, 140, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.music-icon-container.playing {
+  transform: scale(1.1);
+}
+
+.music-icon {
+  font-size: 4rem;
+  color: #84A98C;
+}
+
+.sound-waves {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.wave {
+  position: absolute;
+  border: 2px solid #84A98C;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.sound-waves.active .wave {
+  animation: wave-pulse 2s infinite;
+}
+
+.wave1 {
+  width: 160px;
+  height: 160px;
+  top: 20px;
+  left: 20px;
+  animation-delay: 0s;
+}
+
+.wave2 {
+  width: 180px;
+  height: 180px;
+  top: 10px;
+  left: 10px;
+  animation-delay: 0.5s;
+}
+
+.wave3 {
+  width: 200px;
+  height: 200px;
+  top: 0;
+  left: 0;
+  animation-delay: 1s;
+}
+
+@keyframes wave-pulse {
+  0% {
+    opacity: 1;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+}
+
+.track-info {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.track-info h2 {
+  color: #1B4965;
+  margin: 0 0 5px 0;
+  font-size: 1.4rem;
+}
+
+.track-info p {
+  color: #84A98C;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.progress-container {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.time-display {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  color: #1B4965;
+  font-size: 0.9rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: #EDEDE9;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: #84A98C;
+  transition: width 0.3s ease;
+}
+
+.player-controls {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.player-controls ion-button {
+  --border-radius: 25px;
+  font-weight: 500;
+  min-width: 100px;
+}
+
+/* Fix all button colors to match app theme */
+.player-controls ion-button {
+  --background: #84A98C !important;
+  --color: white !important;
+}
+
+.player-controls ion-button[color="primary"] {
+  --background: #84A98C !important;
+  --color: white !important;
+}
+
+.player-controls ion-button[color="medium"] {
+  --background: #84A98C !important;
+  --color: white !important;
+}
+
+.player-controls ion-button[color="danger"] {
+  --background: transparent !important;
+  --color: #1B4965 !important;
+  --border-color: #1B4965 !important;
+  border: 2px solid #1B4965 !important;
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 25px;
+  gap: 10px;
+}
+
+.volume-control ion-icon {
+  color: #84A98C;
+  font-size: 1.2rem;
+}
+
+.volume-control ion-range {
+  flex: 1;
+  --bar-background: #EDEDE9;
+  --bar-background-active: #84A98C;
+  --knob-background: #84A98C;
+}
+
+.track-benefits {
+  width: 100%;
+  background: #EDEDE9;
+  border-radius: 12px;
+  padding: 15px;
+}
+
+.track-benefits h4 {
+  color: #1B4965;
+  margin: 0 0 15px 0;
+  font-size: 1.1rem;
+  text-align: center;
+}
+
+.benefits-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.benefit-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #1B4965;
+  font-size: 0.85rem;
+}
+
+.benefit-item ion-icon {
+  color: #84A98C;
+  font-size: 1rem;
+  flex-shrink: 0;
+}

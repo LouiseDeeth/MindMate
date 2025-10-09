@@ -1,0 +1,157 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="!showTrackSelection">
+      <ion-button (click)="backToSelection()">
+        <ion-icon name="arrow-back-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>{{ showTrackSelection ? 'Relaxing Music' : selectedTrack?.name }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <!-- Track Selection View -->
+  <div *ngIf="showTrackSelection" class="track-selection">
+    <h2>Choose Your Sound</h2>
+    <p class="description">Select relaxing sounds to help you unwind, focus, or sleep</p>
+    
+    <div class="tracks-grid">
+      <div 
+        *ngFor="let track of musicTracks"
+        class="track-card"
+        (click)="selectTrack(track)">
+        <div class="track-icon">
+          <ion-icon [name]="track.icon"></ion-icon>
+        </div>
+        <h3>{{ track.name }}</h3>
+        <p class="track-duration">{{ formattedDuration }} minutes</p>
+        <p class="track-description">{{ track.description }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Music Player View -->
+  <div *ngIf="!showTrackSelection && selectedTrack" class="music-player">
+    
+    <!-- Album Art / Visual -->
+    <div class="music-visual">
+      <div class="music-icon-container" [class.playing]="isPlaying">
+        <ion-icon [name]="selectedTrack.icon" class="music-icon"></ion-icon>
+      </div>
+      <div class="sound-waves" [class.active]="isPlaying">
+        <div class="wave wave1"></div>
+        <div class="wave wave2"></div>
+        <div class="wave wave3"></div>
+        <div class="wave wave4"></div>
+      </div>
+    </div>
+
+    <!-- Track Info -->
+    <div class="track-info">
+      <h2>{{ selectedTrack.name }}</h2>
+      <p>{{ selectedTrack.description }}</p>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="progress-container">
+      <div class="time-display">
+        <span class="current-time">{{ formattedCurrentTime }}</span>
+        <span class="total-time">{{ formattedDuration }}</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" [style.width.%]="progressPercentage"></div>
+      </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="player-controls">
+      <ion-button 
+        *ngIf="!isPlaying && !isPaused" 
+        (click)="playMusic()" 
+        fill="solid" 
+        size="large">
+        <ion-icon name="play" slot="start"></ion-icon>
+        Play
+      </ion-button>
+      
+      <ion-button 
+        *ngIf="isPlaying" 
+        (click)="pauseMusic()" 
+        fill="solid" 
+        size="large"
+        color="medium">
+        <ion-icon name="pause" slot="start"></ion-icon>
+        Pause
+      </ion-button>
+      
+      <ion-button 
+        *ngIf="isPaused" 
+        (click)="resumeMusic()" 
+        fill="solid" 
+        size="large"
+        color="primary">
+        <ion-icon name="play" slot="start"></ion-icon>
+        Resume
+      </ion-button>
+      
+      <ion-button 
+        *ngIf="isPlaying || isPaused" 
+        (click)="stopMusic()" 
+        fill="outline" 
+        size="large"
+        color="danger">
+        <ion-icon name="stop" slot="start"></ion-icon>
+        Stop
+      </ion-button>
+    </div>
+
+    <!-- Volume Control -->
+    <div class="volume-control">
+      <ion-icon name="volume-low-outline"></ion-icon>
+      <ion-range 
+        [value]="volume * 100" 
+        (ionInput)="adjustVolume($event)"
+        min="0" 
+        max="100" 
+        step="5">
+      </ion-range>
+      <ion-icon name="volume-high-outline"></ion-icon>
+    </div>
+
+    <!-- Track Benefits -->
+    <div class="track-benefits">
+      <h4>Benefits</h4>
+      <div class="benefits-list">
+        <div *ngIf="selectedTrack.type === 'nature'" class="benefit-item">
+          <ion-icon name="leaf-outline"></ion-icon>
+          <span>Reduces stress and anxiety</span>
+        </div>
+        <div *ngIf="selectedTrack.type === 'ambient'" class="benefit-item">
+          <ion-icon name="bulb-outline"></ion-icon>
+          <span>Enhances focus and concentration</span>
+        </div>
+        <div *ngIf="selectedTrack.type === 'meditation'" class="benefit-item">
+          <ion-icon name="flower-outline"></ion-icon>
+          <span>Deepens meditation practice</span>
+        </div>
+        <div *ngIf="selectedTrack.type === 'sleep'" class="benefit-item">
+          <ion-icon name="moon-outline"></ion-icon>
+          <span>Promotes restful sleep</span>
+        </div>
+        <div class="benefit-item">
+          <ion-icon name="heart-outline"></ion-icon>
+          <span>Lowers blood pressure</span>
+        </div>
+        <div class="benefit-item">
+          <ion-icon name="happy-outline"></ion-icon>
+          <span>Improves mood and wellbeing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

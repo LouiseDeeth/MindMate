@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 import { UserMenuPopoverComponent } from '../components/user-menu-popover/user-menu-popover.component';
 import { BreathingModalComponent } from '../modals/breathing-modal/breathing-modal.component';
 import { GuidedMeditationComponent } from '../modals/guided-meditation/guided-meditation.component';
+import { RelaxingMusicComponent } from '../modals/relaxing-music/relaxing-music.component';
 
 @Component({
   selector: 'app-meditation',
@@ -21,7 +22,8 @@ import { GuidedMeditationComponent } from '../modals/guided-meditation/guided-me
     FormsModule,
     RouterModule,
     BreathingModalComponent,
-    GuidedMeditationComponent
+    GuidedMeditationComponent,
+    RelaxingMusicComponent
   ],
 })
 export class MeditationPage implements OnInit {
@@ -92,19 +94,24 @@ export class MeditationPage implements OnInit {
 
     return await modal.present();
   }
-  
+
   // Open the guided meditation modal
   async startGuidedMeditation() {
     const modal = await this.modalController.create({
       component: GuidedMeditationComponent,
       cssClass: 'guided-meditation-modal'
     });
-    
+
     return await modal.present();
   }
 
-  // For the relaxing music button (placeholder for now)
-  playRelaxingMusic() {
-    console.log('Playing relaxing music...');
+  // For the relaxing music button
+  async playRelaxingMusic() {
+    const modal = await this.modalController.create({
+      component: RelaxingMusicComponent,
+      cssClass: 'relaxing-music-modal'
+    });
+
+    return await modal.present();
   }
 }
