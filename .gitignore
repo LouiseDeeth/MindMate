@@ -76,3 +76,4 @@ src/environments/environment.prod.ts
 
 # Secure API keys
 key.env
+.env.mindmate-cc00b
