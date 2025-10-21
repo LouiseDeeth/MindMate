@@ -15,7 +15,7 @@ exports.claudeProxy = onRequest(async (req, res) => {
       }
 
       // Try using process.env for Firebase config
-      const CLAUDE_API_KEY = process.env.CLAUDE_API_KEY;
+      const CLAUDE_API_KEY = claudeApiKey.value();
 
       if (!CLAUDE_API_KEY) {
         console.error("Missing Claude API key in configuration");

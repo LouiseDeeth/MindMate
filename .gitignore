@@ -12,8 +12,6 @@ $RECYCLE.BIN/
 *.log
 log.txt
 
-.env
-
 /.sourcemaps
 /.versions
 /coverage
@@ -53,7 +51,6 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
-
 # Miscellaneous
 /.angular
 /.angular/cache
@@ -69,3 +66,13 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment files
+src/environments/environment.ts
+src/environments/environment.prod.ts
+
+# Secure API keys
+key.env
+.env
+*.env
+.env.*

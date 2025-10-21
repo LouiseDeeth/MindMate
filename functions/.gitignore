@@ -1,2 +1,8 @@
 node_modules/
 *.local
+
+.env
+*.env
+.env.*
+
+functions\.env.mindmate-cc00b
