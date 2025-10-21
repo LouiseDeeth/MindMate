@@ -67,12 +67,11 @@ testem.log
 .DS_Store
 Thumbs.db
 
-# Environment files
+
 src/environments/environment.ts
 src/environments/environment.prod.ts
 
 # Secure API keys
 key.env
-.env
-*.env
-.env.*
+
+functions/.env.mindmate-cc00b
