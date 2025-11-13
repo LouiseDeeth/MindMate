@@ -4,7 +4,7 @@
 
 ---
 
-### 🔗 Live Demo
+### Live Demo
 https://mindmate-cc00b.web.app
 
 ---
@@ -28,6 +28,12 @@ https://mindmate-cc00b.web.app
 - Firebase Cloud Functions (Claude Proxy API)
 - Claude 3 API (Anthropic)
 - Node.js 18 for backend functions
+
+---
+
+## Prototype
+
+<img width="1761" height="928" alt="image" src="https://github.com/user-attachments/assets/090d6483-122f-4541-8e21-6571c4c82340" />
 
 ---
 
